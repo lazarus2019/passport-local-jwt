@@ -1,5 +1,6 @@
 const passport = require("passport");
 const { encodePassword } = require("../../utils/password");
+const { generateToken, decodeToken } = require("../../utils/token");
 const route = require("express").Router();
 const User = require("../models/userModel");
 
@@ -38,6 +39,10 @@ route.post("/register", async (req, res) => {
       email: req.body.email,
     });
 
+    const token = generateToken(user?._id);
+
+    res.setHeader("Authorization", token);
+
     res.status(200).json({ status: success });
   } catch (error) {
     res.status(500).json({ error });
@@ -57,5 +62,23 @@ route.get("/profile", async (req, res) => {
     message: "UnAuthorization",
   });
 });
+
+route.get(
+  "/secret-jwt",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    if (req?.user) {
+      return res.status(200).json({
+        status: "success",
+        message: "secret page",
+      });
+    }
+
+    return res.status(501).json({
+      status: "failed",
+      message: "UnAuthorization",
+    });
+  }
+);
 
 module.exports = route;
