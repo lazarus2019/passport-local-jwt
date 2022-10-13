@@ -1,14 +1,28 @@
 ### Install extension REST Client first
 ### check server
 
-GET http://localhost:3000/status
+GET http://localhost:5000/status
 
-### Login
-
-POST http://localhost:5000/Login
+### Register
+POST http://localhost:5000/register
 Content-Type: application/json
 
 {
-    "username": "123",
+    "username": "laptrinhvien",
+    "password": "123",
+    "email": "ltv.aptech2019@gmail.com"
+}
+
+
+### Login
+
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "username": "krix20191.2",
     "password": "123"
 }
+
+### Profile: local + session
+GET http://localhost:5000/profile

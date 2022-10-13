@@ -1,10 +1,13 @@
 require("dotenv").config();
 const express = require("express");
+const session = require("express-session");
 const mongoClient = require("mongoose");
 const logger = require("morgan");
+const passport = require("passport");
 const userRoute = require("./src/api/routes/userRoute");
+require("./src/api/middlewares/passport");
 
-const { MONGODB_URI, PORT } = process.env;
+const { MONGODB_URI, PORT, SESSION_SECRET_KEY } = process.env;
 
 mongoClient
   .connect(MONGODB_URI)
@@ -21,6 +24,21 @@ app.use(logger("dev"));
 // parse application/json (express >= 4.16)
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Session
+app.use(
+  session({
+    saveUninitialized: false,
+    secret: SESSION_SECRET_KEY,
+    resave: true,
+    cookie: {
+      maxAge: 1000 * 30, // 30s
+    },
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/", userRoute);
 
