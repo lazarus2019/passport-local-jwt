@@ -1,0 +1,14 @@
+### Install extension REST Client first
+### check server
+
+GET http://localhost:3000/status
+
+### Login
+
+POST http://localhost:5000/Login
+Content-Type: application/json
+
+{
+    "username": "123",
+    "password": "123"
+}
